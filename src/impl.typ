@@ -42,6 +42,15 @@
   "1/10": "⅒",
 )
 
+#let _assert-keys = symbols.keys()
+#let _assert-valid(s) = {
+  for char in s.codepoints() {
+    if char not in _assert-keys {
+      panic("Unsupported character " + char)
+    }
+  }
+}
+
 
 #let frackable(
   numerator: 1,
@@ -49,7 +58,8 @@
   use-predefined: true
 ) = {
   (numerator, denominator) = (str(numerator), str(denominator))
-  if "." in numerator or "." in denominator {panic("Fractions of floats is not supported!")}
+  _assert-valid(numerator)
+  _assert-valid(denominator)
   
   if use-predefined {
     let predefined = premade.at(
