@@ -12,4 +12,3 @@
 #frackable(numerator: 9, denominator: 16)
 #frackable(numerator: 31, denominator: 32)
 #frackable(numerator: 0, denominator: "000")
-#frackable()
