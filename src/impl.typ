@@ -51,7 +51,27 @@
   }
 }
 
-
+/// Create vulgar fractions using unicode
+/// #example(```typ
+/// #frackable()
+/// #frackable(denominator: 3)
+/// #frackable(numerator: 9, denominator: 16)
+/// #frackable(numerator: 31, denominator: 32)
+/// #frackable(numerator: 0, denominator: "000")
+/// ```, scale-preview: 200%)
+/// 
+/// - numerator (integer, string): The top part of the fraction.
+/// - denominator (integer, string): The bottom part of the fraction.
+/// - use-predefined (boolean): While this function can typeset arbitrary vulgar
+///       fractions, there are some for which there is a predefined unicode
+///       codepoint that is prioritized. Set this value to false to prevent
+///       predefined codepoints being used.
+/// 
+///       #example(```typ
+///       #frackable() \
+///       #frackable(use-predefined: false)
+///       ```, scale-preview: 75%)
+/// -> content
 #let frackable(
   numerator: 1,
   denominator: 2,
