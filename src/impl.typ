@@ -19,9 +19,7 @@
   whole: none
 ) = {
   show: box
-  if whole != none {
-    str(whole) + "\u{2064}"
-  }
+  if whole != none {str(whole) + "\u{2064}"}
   set text(fractions: true)
   str(numerator) + "\u{2044}" + str(denominator)
 }
@@ -58,9 +56,7 @@
   shift-denominator-y: 0.05em,
 ) = (numerator, denominator, whole: none) => {
   show: box
-  if whole != none {
-    str(whole) + "\u{2064}"
-  }
+  if whole != none {str(whole) + "\u{2064}"}
   text(
     str(numerator),
     size: font-size, baseline: shift-numerator-y,
