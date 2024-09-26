@@ -29,8 +29,21 @@
 /// Returns a function having the same signature as `frackable`, to be used
 /// for typesetting vulgar fractions within fonts that do not support the
 /// `frac` feature. Default values are chosen for `Linux Libertine` font.
-/// Can be used to display arbitrary content as a vulgar fraction, rather than
+/// Can be used to display arbitrary strings as a vulgar fraction, rather than
 /// just integers or interger-like strings.
+/// #example(```typ
+/// #set text(font: "Calibri")
+/// #let my-frackable = generator(
+///   shift-numerator-x: -0.1em,
+///   shift-denominator-x: -0.1em,
+/// )
+/// 
+/// #my-frackable(1, 2)
+/// #my-frackable(1, 3)
+/// #my-frackable(3, 4, whole: 9)
+/// #my-frackable(0, "000")
+/// 
+/// ```)
 /// 
 /// - font-size (length): Font size with which to display numerator and denominator. Best practice is to use `em` units.
 /// - shift-numerator-y (length): Amount of vertical shift to apply to numerator. Best practice is to use `em` units.
