@@ -22,45 +22,41 @@
   if whole != none {
     str(whole) + "\u{2064}"
   }
-  set text(features: ("frac",),)
+  set text(fractions: true)
   str(numerator) + "\u{2044}" + str(denominator)
 }
 
-/// Returns a function having the same signature as `generator`, to be used
+/// Returns a function having the same signature as `frackable`, to be used
 /// for typesetting vulgar fractions within fonts that do not support the
 /// `frac` feature. Default values are chosen for `Linux Libertine` font.
 /// Can be used to display arbitrary content as a vulgar fraction, rather than
 /// just integers or interger-like strings.
 /// 
 /// - font-size (length): Font size with which to display numerator and denominator. Best practice is to use `em` units.
-/// - shift-numerator (length): Amount of vertical shift to apply to numerator. Best practice is to use `em` unites
-/// - shift-denominator (length): Amount of vertical shift to apply to denominator. Best practice is to use `em` unites
+/// - shift-numerator-y (length): Amount of vertical shift to apply to numerator. Best practice is to use `em` units.
+/// - shift-numerator-x (length): Amount of horiztonal space *between slash and numerator*. Best practice is to use `em` units.
+/// - shift-denominator-y (length): Amount of vertical shift to apply to denominator. Best practice is to use `em` units.
+/// - shift-denominator-x (length): Amount of horiztonal space *between slash and denominator*. Best practice is to use `em` units.
 #let generator(
-  font-size: 0.5em,
-  shift-numerator: -0.3em,
-  shift-denominator: 0.05em
+  font-size: 0.55em,
+  shift-numerator-x: -0em,
+  shift-numerator-y: -0.6em,
+  shift-denominator-x: 0em,
+  shift-denominator-y: 0.05em,
 ) = (numerator, denominator, whole: none) => {
   show: box
   if whole != none {
     str(whole) + "\u{2064}"
   }
-  box(
-    move(
-      dy: shift-numerator,
-      text(
-        str(numerator),
-        size: font-size
-      )
-    ),
+  text(
+    str(numerator),
+    size: font-size, baseline: shift-numerator-y,
   )
-  box("\u{2044}")
-  box(
-    move(
-      dy: shift-denominator,
-      text(
-        str(denominator),
-        size: font-size
-      )
-    ),
+  h(shift-numerator-x)
+  "\u{2044}"
+  h(shift-denominator-x)
+  text(
+    str(denominator),
+    size: font-size, baseline: shift-denominator-y
   )
 }
