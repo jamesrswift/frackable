@@ -1,1 +1,1 @@
-#import "impl.typ": frackable
+#import "impl.typ": frackable, generator

@@ -1,9 +1,9 @@
 #import "@preview/tidy:0.3.0"
 #import "@preview/mantys:0.1.4": *
-#import "/src/lib.typ": frackable
+#import "/src/lib.typ": frackable, generator
 
 #let package = toml("/typst.toml").package
-#let docs = tidy.parse-module(read("/src/impl.typ"), scope: (frackable: frackable),)
+#let docs = tidy.parse-module(read("/src/impl.typ"), scope: (frackable: frackable, generator: generator),)
 
 #titlepage(
   package.name,

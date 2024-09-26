@@ -1,97 +1,66 @@
-#let _generate-symbol(
-  super,
-  sub
-) = {
-  (:
-    "superscript": super,
-    "subscript": sub,
-  )
-}
-
-#let symbols = (:
-  "0": _generate-symbol("⁰", "₀"),
-  "1": _generate-symbol("¹", "₁"),
-  "2": _generate-symbol("²", "₂"),
-  "3": _generate-symbol("³", "₃"),
-  "4": _generate-symbol("⁴", "₄"),
-  "5": _generate-symbol("⁵", "₅"),
-  "6": _generate-symbol("⁶", "₆"),
-  "7": _generate-symbol("⁷", "₇"),
-  "8": _generate-symbol("⁸", "₈"),
-  "9": _generate-symbol("⁹", "₉"),
-)
-
-#let premade = (:
-  "1/2": "½",
-  "1/3": "⅓",
-  "2/3": "⅔",
-  "1/4": "¼",
-  "3/4": "¾",
-  "1/5": "⅕",
-  "2/5": "⅖",
-  "3/5": "⅗",
-  "4/5": "⅘",
-  "1/6": "⅙",
-  "5/6": "⅚",
-  "1/7": "⅐",
-  "1/8": "⅛",
-  "3/8": "⅜",
-  "5/8": "⅝",
-  "7/8": "⅞",
-  "1/9": "⅑",
-  "1/10": "⅒",
-)
-
-#let _assert-keys = symbols.keys()
-#let _assert-valid(s) = {
-  for char in s.codepoints() {
-    if char not in _assert-keys {
-      panic("Unsupported character " + char)
-    }
-  }
-}
-
 /// Create vulgar fractions using unicode
 /// #example(```typ
-/// #frackable()
-/// #frackable(denominator: 3)
-/// #frackable(numerator: 9, denominator: 16)
-/// #frackable(numerator: 31, denominator: 32)
-/// #frackable(numerator: 0, denominator: "000")
+/// #frackable(1, 2)
+/// #frackable(1, 3)
+/// #frackable(9, 16)
+/// #frackable(31, 32)
+/// #frackable(0, "000")
+/// #frackable(whole: 9, 3, 4)
 /// ```, scale-preview: 200%)
 /// 
 /// - numerator (integer, string): The top part of the fraction.
 /// - denominator (integer, string): The bottom part of the fraction.
-/// - use-predefined (boolean): While this function can typeset arbitrary vulgar
-///       fractions, there are some for which there is a predefined unicode
-///       codepoint that is prioritized. Set this value to false to prevent
-///       predefined codepoints being used.
-/// 
-///       #example(```typ
-///       #frackable() \
-///       #frackable(use-predefined: false)
-///       ```, scale-preview: 75%)
+/// - whole (integer, string): Optional whole number to precede the vulgar
+///     fraction, making mixed fraction.
 /// -> content
 #let frackable(
-  numerator: 1,
-  denominator: 2,
-  use-predefined: true
+  numerator,
+  denominator,
+  whole: none
 ) = {
-  (numerator, denominator) = (str(numerator), str(denominator))
-  _assert-valid(numerator)
-  _assert-valid(denominator)
-  
-  if use-predefined {
-    let predefined = premade.at(
-      numerator + "/" + denominator,
-      default: none
-    )
-    if predefined != none {return predefined}
+  show: box
+  if whole != none {
+    str(whole) + "\u{2064}"
   }
-  
-  box({
-    numerator.codepoints().map(char=>{symbols.at(char).superscript}).join()
-    [⁄]
-    denominator.codepoints().map(char=>{symbols.at(char).subscript}).join()
-  })
+  set text(features: ("frac",),)
+  str(numerator) + "\u{2044}" + str(denominator)
+}
+
+/// Returns a function having the same signature as `generator`, to be used
+/// for typesetting vulgar fractions within fonts that do not support the
+/// `frac` feature. Default values are chosen for `Linux Libertine` font.
+/// Can be used to display arbitrary content as a vulgar fraction, rather than
+/// just integers or interger-like strings.
+/// 
+/// - font-size (length): Font size with which to display numerator and denominator. Best practice is to use `em` units.
+/// - shift-numerator (length): Amount of vertical shift to apply to numerator. Best practice is to use `em` unites
+/// - shift-denominator (length): Amount of vertical shift to apply to denominator. Best practice is to use `em` unites
+#let generator(
+  font-size: 0.5em,
+  shift-numerator: -0.3em,
+  shift-denominator: 0.05em
+) = (numerator, denominator, whole: none) => {
+  show: box
+  if whole != none {
+    str(whole) + "\u{2064}"
+  }
+  box(
+    move(
+      dy: shift-numerator,
+      text(
+        str(numerator),
+        size: font-size
+      )
+    ),
+  )
+  box("\u{2044}")
+  box(
+    move(
+      dy: shift-denominator,
+      text(
+        str(denominator),
+        size: font-size
+      )
+    ),
+  )
 }
